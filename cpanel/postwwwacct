@@ -1,0 +1,23 @@
+#!/usr/bin/perl 
+my %OPTS = @ARGV;
+my $user = $OPTS{'user'};
+system("/usr/local/sbin/tempdns $OPTS{'user'}");
+system("perl -p -i -e 's/cpanel_user/$OPTS{'user'}/g' /home/$OPTS{'user'}/php.ini");
+system("/bin/mkdir /home/$OPTS{'user'}/tmp/eaccelerator/");
+system("/bin/mkdir /home/$OPTS{'user'}/tmp/xcache/");
+system("/bin/mkdir /home/$OPTS{'user'}/tmp/apc/");
+system("/bin/mkdir /etc/php-conf/$OPTS{'user'}/");
+system("/bin/mkdir /usr/local/apache/conf/userdata/std/2/$OPTS{'user'}/");
+## svn manager
+system("/bin/mkdir /etc/svn-repos/$OPTS{'user'}/");
+system("/bin/mkdir /home/$OPTS{'user'}/svn-repos/");
+system("/bin/chown -R $OPTS{'user'}: /home/$OPTS{'user'}/svn-repos/");
+system("/bin/chown -R $OPTS{'user'}: /etc/svn-repos/$OPTS{'user'}/");
+system("/usr/local/sbin/svn_db $OPTS{'user'}");
+# end svn manager
+system("echo /home/$OPTS{'user'}/public_html >> /root/monitor_paths");
+system("chmod 777 /home/$OPTS{'user'}/tmp");
+system("/usr/local/sbin/prava");
+#  SPF and DKeys installations
+system ("/usr/local/cpanel/bin/domain_keys_installer $OPTS{'user'}");
+system ("/usr/local/cpanel/bin/spf_installer $OPTS{'user'}");

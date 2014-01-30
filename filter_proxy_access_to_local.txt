@@ -1,0 +1,13 @@
+VPS / openvz / virtuozzo
+
+iptables -A INPUT -i venet0 -p tcp --dport 8081 -m state --state NEW -j ACCEPT
+iptables -t nat -A PREROUTING -i venet0 -p tcp --dport 8081 -j DNAT --to-destination 127.0.0.1:8081
+iptables -A FORWARD -t filter -i venet0 -p tcp --dport 8081 -j ACCEPT
+iptables -A OUTPUT -t filter -o venet0 -p tcp --dport 8081 -j ACCEPT
+
+Server
+
+iptables -A INPUT -i eth0 -p tcp --dport 8081 -m state --state NEW -j ACCEPT
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8081 -j DNAT --to-destination 127.0.0.1:8081
+iptables -A FORWARD -t filter -i eth0 -p tcp --dport 8081 -j ACCEPT
+iptables -A OUTPUT -t filter -o eth0 -p tcp --dport 8081 -j ACCEPT

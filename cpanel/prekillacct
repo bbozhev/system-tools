@@ -1,0 +1,5 @@
+#!/usr/bin/perl 
+my %OPTS = @ARGV;
+my $user = $OPTS{'user'};
+system("chattr -ai /home/$OPTS{'user'}/public_html/cgi-bin/php5.fcgi");
+system("chattr -ai /home/$OPTS{'user'}/.htaccess");

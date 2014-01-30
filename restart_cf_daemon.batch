@@ -1,0 +1,20 @@
+Start-Job -ScriptBlock {Restart-Service -Name "ColdFusion 9 ODBC Server" -Force }
+
+#give it 5 seconds to stop
+Start-Sleep -Seconds 10
+
+$SERVICESTATE = (Get-Service | where{$_.Name -eq "ColdFusion 9 ODBC Server"}).Status
+if( $SERVICESTATE -eq "Stopping" -or $SERVICESTATE -eq "StopPending")
+{
+    # still stopping so force process stop
+    Stop-Process -Name "swsoc" -Force
+} 
+
+#give it 5 seconds to start before we try it again
+Start-Sleep -Seconds 5
+
+$SERVICESTATE = (Get-Service | where{$_.Name -eq "ColdFusion 9 ODBC Server"}).Status
+if( $SERVICESTATE -eq "Stopped" )
+{
+    Start-Service -Name "ColdFusion 9 ODBC Server" -Force
+}

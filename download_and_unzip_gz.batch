@@ -1,0 +1,15 @@
+@echo off
+:: FORFILES /P C:\SSIS\ivyexec\current /M *.* /D -10 /C "cmd /c del @file"
+:: have to have 7-zip and wget for windows installed first and make sure the PATH is correctly applied
+setlocal enabledelayedexpansion
+:: Enter the folder under which you wish to download the file prior to extracting
+cd C:\somepath\
+
+del somefile.txt /q
+del somefile.gz /q
+
+wget --no-check-certificate https://somesite.com/somefile.gz -O C:\somepath\somefile.gz
+set PATH=%PATH%;C:\Program Files\7-Zip
+7z x somefile.gz
+
+del somefile.gz /q
