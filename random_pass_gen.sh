@@ -1,7 +1,7 @@
 #!/bin/sh
-function adminpass
+function rpass
 {
 echo `</dev/urandom tr -dc A-Za-z0-9 | head -c12`
 }
 
-echo `adminpass`;
+echo `rpass`;
